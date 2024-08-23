@@ -2,7 +2,6 @@ module Globalize
   module AttributeMethods
     module Serialization
       def serialize(attr_name, class_name_or_coder = Object, **options)
-        super(attr_name, class_name_or_coder, **options)
 
         coder = if class_name_or_coder == ::JSON
                   ::ActiveRecord::Coders::JSON
@@ -12,6 +11,7 @@ module Globalize
                   ::ActiveRecord::Coders::YAMLColumn.new(attr_name, class_name_or_coder)
                 end
 
+        super(attr_name, coder: class_name_or_coder, **options)
         self.globalize_serialized_attributes = globalize_serialized_attributes.dup
         self.globalize_serialized_attributes[attr_name] = coder
       end
